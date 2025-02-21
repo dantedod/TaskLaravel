@@ -64,7 +64,9 @@ class AuthController extends Controller
       ]
     ]);
 
-    echo 'Logado com sucesso';
+    //redirect to home
+
+    return redirect('/');
   }
 
 
