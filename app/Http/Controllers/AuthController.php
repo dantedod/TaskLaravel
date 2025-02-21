@@ -56,7 +56,7 @@ class AuthController extends Controller
     $user->last_login = date('Y-m-d H:i:s');
     $user->save();
 
-    //login user
+    //login user  
     session([
       'user' => [
         'id' => $user->id,
@@ -70,6 +70,9 @@ class AuthController extends Controller
 
   public function logout()
   {
-    echo "logout";
+    //logout from the applicaiton
+
+    session()->forget('user');
+    return redirect()->to('login');
   }
 }
