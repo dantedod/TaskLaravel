@@ -15,7 +15,7 @@ class MainController extends Controller
   public function index()
   {
     $id = session('user.id');
-    $notes = User::find($id)->notes()->get()->toArray();
+    $notes = User::find($id)->notes()->whereNull('deleted_at')->get()->toArray();
 
 
 
@@ -117,6 +117,29 @@ class MainController extends Controller
   public function deleteNote($id)
   {
     $id = Operations::decryptId($id);
-    echo "I'm try to delete the note with id:" . $id;
+
+    //load note
+
+    $note = Note::find($id);
+
+    //show delete note confiirm
+    return view('delete_note', ['note' => $note]);
+  }
+
+  public function deleteNoteConfirm($id)
+  {
+
+    //check if id is encrypt
+    $id = Operations::decryptId($id);
+    //load note
+    $note = Note::find($id);
+    //1. hard delete
+    //$note->delete();
+
+    //2. softdelete
+    $note->deleted_at = date('Y:m:d H:i:s');
+    $note->save();
+    //redirect to home
+    return redirect()->route('home');
   }
 }
